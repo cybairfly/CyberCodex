@@ -1,4 +1,4 @@
-import {validate} from 'cyber-tools';
+// import {validate} from 'cyber-tools';
 import got from 'got';
 
 import {Service} from '../index.js';
@@ -6,7 +6,7 @@ import {Service} from '../index.js';
 export class Ntfy extends Service {
 	send = async ({message, channel, options = {title: null, priority: null, tags: null}}) => {
 		const {title, priority, tags} = options;
-		const messageRequest = this.Message({
+		const request = this.Message({
 			topic: channel,
 			title,
 			tags,
@@ -14,8 +14,9 @@ export class Ntfy extends Service {
 			priority,
 		});
 
-		this.validate(messageRequest);
-		this.dispatch(messageRequest);
+		// TODO
+		// this.validate(messageRequest);
+		this.dispatch(request);
 	};
 
 	dispatch = async request => {
@@ -23,12 +24,6 @@ export class Ntfy extends Service {
 	};
 
 	validate = request => {
-		const model = {
-			message: '',
-			channelz: '',
-		};
-
-		validate(request, model);
 	};
 
 	Message = ({topic, title, priority, tags, body}) => ({
@@ -39,6 +34,6 @@ export class Ntfy extends Service {
 			tags,
 			priority,
 		},
-		body,
+		body: typeof body === 'string' ? body : JSON.stringify(body),
 	});
 }

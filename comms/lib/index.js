@@ -1,25 +1,60 @@
-import got from 'got';
-
+import {Mail} from './services/mail/index.js';
+import {Mock} from './services/mock/index.js';
 import {Ntfy} from './services/ntfy/index.js';
 
-const input = {
-	message: 'hi',
-	channel: 'wolt-demand',
-};
+const defaultServices = [
+	Mock,
+	Ntfy,
+];
 
 class Comms {
-	constructor() {
-		this.x = 123;
+	#services;
+
+	static services = {
+		Mock,
+		Mail,
+		Ntfy,
+	};
+
+	constructor(services = defaultServices) {
+		this.#services = services.map(ServiceOrInstance => typeof ServiceOrInstance === 'function' ? new ServiceOrInstance() : ServiceOrInstance);
 	}
+
+	get services() {
+		return this.#services;
+	}
+
+	send = async ({service, message, channel, options}) => service.send({message, channel, options});
+
+	cast = async ({message, channel, options}) =>
+		this.services
+			.map(service =>
+				this.send({service, message, channel, options}));
+
+	mock = new Mock();
 
 	ntfy = new Ntfy();
 
 	slack = {};
 }
 
-const Robot = {
-	comms: new Comms(),
+const comms = new Comms();
+
+export {
+	comms,
+	Comms,
 };
 
-const {message, channel} = input;
-Robot.comms.ntfy.send({message, channel, options: {priority: 4}});
+// const Robot = {
+// 	comms: new Comms(),
+// };
+
+// const input = {
+// 	message: 'hi',
+// 	channel: 'test',
+// };
+
+// const {message, channel} = input;
+// comms.cast({message, channel, options: {priority: 4}});
+
+// await new Comms.services.Mail({recipients: ['icode@email.cz']}).send({message: 'test', channel: 'test'});

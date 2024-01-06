@@ -3,11 +3,15 @@ export class Service {
 		throw Error('Method not implemented in integration:', super.name);
 	};
 
-	dispatch = () => {
+	normalize = message => typeof message === 'string' ?
+		message :
+		message?.toString?.() || JSON.stringify(message);
+
+	dispatch = message => {
 		throw Error('Method not implemented in integration:', super.name);
 	};
 
-	validate = () => {
+	validate = request => {
 		throw Error('Method not implemented in integration:', super.name);
 	};
 
