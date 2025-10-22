@@ -126,7 +126,7 @@ export const extendOutput = extenders => output => extenders.reduce((pool, next)
  * @param {Array<Function> | undefined} decorators
  * @returns {(result: Object) => Object}
  */
-export const getResult = decorators => result => decorators ? extendOutput(decorators)(dot.object(result)) : dot.object(result);
+export const getResult = decorators => result => decorators ? extendOutput(decorators)(result) : result;
 
 /**
  *
