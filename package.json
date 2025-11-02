@@ -4,7 +4,7 @@
     "main": "index.js",
     "description": "Monorepo for installation from repository, development purposes only. Install the codex package or individual published packages for production.",
     "dependencies": {
-        "apify-tools": "file:apify",
+        "apify-tools": "file:./apify",
         "cyber-comms": "file:./comms",
         "cyber-consts": "file:./consts",
         "cyber-error": "file:./error",
