@@ -143,4 +143,17 @@ export class Watcher {
 			uniqueKey: Date.now().toString(),
 		}]);
 	};
+
+	/**
+	 *
+	 * @param {Array<Object>} outputs
+	 */
+	error = async (outputs, page, {input, signatures} = this.state) => {
+		const title = page ? await page.title() : 'Watcher Updates';
+		await notify({
+			items: outputs.slice(0, input.limits.alerts).map(getMessage(signatures)),
+			input,
+			title,
+		});
+	};
 }
